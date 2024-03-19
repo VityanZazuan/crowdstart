@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { AuthService } from '../../core/auth.service';
 
 @Component({
   selector: 'app-footer',
@@ -8,6 +9,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './footer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit{
+  auth = inject(AuthService)
+  ngOnInit(): void {
+    this.auth.zazilk.subscribe()
+  }
 
 }
