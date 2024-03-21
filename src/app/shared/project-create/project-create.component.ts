@@ -3,6 +3,7 @@ import { FormArray, FormBuilder,  FormGroup,  ReactiveFormsModule, Validators } 
 import {  debounceTime } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
+import { ProjectService } from '../../core/project.service';
 @Component({
   selector: 'app-project-create',
   standalone: true,
@@ -15,6 +16,7 @@ export class ProjectCreateComponent {
   @ViewChild("previewImage") previewImage!:ElementRef
   formBuilder = inject(FormBuilder)
   cdr = inject(ChangeDetectorRef)
+  project = inject(ProjectService)
   projectForm = this.formBuilder.group({
     projectName: ['',Validators.required],
     projectDescription: ['',Validators.required],
@@ -41,15 +43,27 @@ export class ProjectCreateComponent {
     rewardsGroup.push(this.createReward())
   }
   deleteReward(index:number):void {
-    console.log(index);
-    
     this.projectForm.controls.rewards.controls.splice(index,1)
-    console.log( this.projectForm.controls.rewards);
     
   }
   createReward(): FormGroup {
     return this.formBuilder.group({
       rewardName: [],
     })
+  }
+  onCreateFormSubmit():void {
+    this.project.createProject(
+      {
+        title:'test',
+        description:'test',
+        author: 'test',
+        totalFunded:0,
+        daysRemaining: null,
+        // tags:string
+        link: 'test',
+        image: 'test',
+        goal: 1000
+    }
+    ).subscribe()
   }
 }
