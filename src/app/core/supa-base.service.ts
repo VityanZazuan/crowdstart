@@ -6,7 +6,7 @@ import { BACKEND_TOKEN_KEY, BACKEND_URL } from '../tokens/superbase-tokens';
   providedIn: 'root'
 })
 export class SupaBaseService {
-  private supabase: SupabaseClient
+  public supabase: SupabaseClient
   _session: AuthSession | null = null
   private superBaseUrl = inject(BACKEND_URL)
   private superBaseToken = inject(BACKEND_TOKEN_KEY)
@@ -60,7 +60,6 @@ export class SupaBaseService {
    */
   async isLoggedIn():Promise<boolean> { 
     const {data } = await this.supabase.auth.getSession()
-    console.log(data);
     this.isLogged.set(!!data.session)
       return !!data.session
   }
