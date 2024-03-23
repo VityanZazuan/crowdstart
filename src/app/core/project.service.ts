@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, from, of } from 'rxjs';
+import { Observable, from, of, tap } from 'rxjs';
 import { IProject } from '../models/project.interface';
 import { SupaBaseService } from './supa-base.service';
 
@@ -79,17 +79,19 @@ export class ProjectService {
       goal: 12312312,
     },
   ];
-  supabase = inject(SupaBaseService)
+  supabase = inject(SupaBaseService);
   getProjects(): Observable<any> {
     return from(this.supabase.supabase.from('projects').select())
   }
 
-  getProjectById(id: number): Observable<IProject> {
-    const project = this.data.find((project) => project.id === id);
-    if (!project) return of();
-    return of<IProject>(project);
+  getProjectById(id: number): Observable<any> {
+    return from(this.supabase.supabase.from('projects').select(`*, rewards(*)`).eq('id', id))
+
   }
-  createProject(project:any): Observable<any> {
-    return from(this.supabase.supabase.from('projects').insert(project))
+  createProject(project: any): Observable<any> {
+    return from(this.supabase.supabase.from('projects').insert(project).select());
+  }
+  createReward(reward: any[]): Observable<any> {
+    return from(this.supabase.supabase.from('rewards').insert(reward));
   }
 }

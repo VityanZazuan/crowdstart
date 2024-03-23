@@ -1,11 +1,10 @@
-import { Router, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { ProjectCreateComponent } from './shared/project-create/project-create.component'
 import { FeedComponent } from './shared/feed/feed.component';
 import { LoginComponent } from './shared/login/login.component';
-import { inject } from '@angular/core';
-import { SupaBaseService } from './core/supa-base.service';
 import { authGuard } from './guards/auth.guard'
-import { FooterComponent } from './shared/footer/footer.component';
+import { canCreateGuard } from './guards/can-create.guard';
+import { ProjectInspectCardComponent } from './shared/project-inspect-card/project-inspect-card.component';
 
 export const routes: Routes = [
   {
@@ -18,20 +17,19 @@ export const routes: Routes = [
       {
         path: 'create',
         component: ProjectCreateComponent,
-        canActivate: [authGuard],
+        canActivate: [canCreateGuard],
       },
-
+      {
+        path:'detail/:id',
+        component: ProjectInspectCardComponent
+      }
     ],
   },
   {
     path: 'login',
     component: LoginComponent,
-    // canActivate: [!authGuard],
+    canActivate: [authGuard],
   },
-//   {
-//     path: 'penis',
-//     component: FooterComponent
-//   },
   {
     path: '**',
     redirectTo: 'feed',

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, effect, input } from '@angular/core';
 import { IProject } from '../../models/project.interface';
 import { NgClass, NgStyle } from '@angular/common';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-project-card',
   standalone: true,
-  imports: [NgStyle, NgClass],
+  imports: [NgStyle, NgClass, RouterLink],
   templateUrl: './project-card.component.html',
   styleUrl: './project-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

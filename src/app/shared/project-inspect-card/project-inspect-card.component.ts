@@ -1,16 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { ProjectService } from '../../core/project.service';
+import { AsyncPipe, NgClass, NgIf, NgStyle } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-project-inspect-card',
   standalone: true,
-  imports: [],
+  imports: [NgClass, NgStyle,NgIf,AsyncPipe],
   templateUrl: './project-inspect-card.component.html',
   styleUrl: './project-inspect-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectInspectCardComponent {
- id = input(0)
  projectService = inject(ProjectService)
- project$ = this.projectService.getProjectById(this.id())
+ route = inject(ActivatedRoute)
+ project$ = this.projectService.getProjectById(Number(this.route.snapshot.queryParamMap.get('id')))
 }

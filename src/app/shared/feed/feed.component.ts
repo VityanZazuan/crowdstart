@@ -2,8 +2,6 @@ import { AsyncPipe, NgFor } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ProjectService } from '../../core/project.service';
 import { ProjectCardComponent } from '../project-card/project-card.component';
-import { tap } from 'rxjs';
-
 @Component({
   selector: 'app-feed',
   standalone: true,
@@ -14,6 +12,5 @@ import { tap } from 'rxjs';
 })
 export class FeedComponent {
   projectService = inject(ProjectService)
-  projects$ = this.projectService.getProjects().pipe((tap((res)=> console.log(res))
-  ))
+  projects$ = this.projectService.getProjects()
 }
