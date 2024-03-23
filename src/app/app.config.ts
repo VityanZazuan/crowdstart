@@ -1,14 +1,13 @@
-import { ApplicationConfig, InjectionToken, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { BACKEND_TOKEN_KEY, BACKEND_URL } from './tokens/superbase-tokens';
-import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors/auth.interceptor'
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    importProvidersFrom(HttpClientModule), 
     provideHttpClient(withInterceptors([authInterceptor])),
     {
       provide: BACKEND_TOKEN_KEY,
