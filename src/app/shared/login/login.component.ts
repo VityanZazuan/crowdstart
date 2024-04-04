@@ -17,7 +17,7 @@ export class LoginComponent {
   supabase = inject(SupaBaseService)
   formBuilder = inject(FormBuilder)
   router = inject(Router)
-  signInForm = this.formBuilder.group({
+  loginForm = this.formBuilder.group({
     email: '',
     password: ''
   })
@@ -25,8 +25,8 @@ export class LoginComponent {
   async onSubmit(): Promise<void> {
     try {
       this.loading = true
-      const email = this.signInForm.value.email as string
-      const password = this.signInForm.value.password as string
+      const email = this.loginForm.value.email as string
+      const password = this.loginForm.value.password as string
       
       const { data, error } = await this.supabase.signInWithPassword(email, password)
       if (error) return;
@@ -42,7 +42,7 @@ export class LoginComponent {
         alert(error.message)
       }
     } finally {
-      this.signInForm.reset()
+      this.loginForm.reset()
       this.loading = false
     }
   }

@@ -5,6 +5,7 @@ import { LoginComponent } from './shared/login/login.component';
 import { authGuard } from './guards/auth.guard'
 import { canCreateGuard } from './guards/can-create.guard';
 import { ProjectInspectCardComponent } from './shared/project-inspect-card/project-inspect-card.component';
+import { SignUpComponent } from './shared/sign-up/sign-up.component';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,11 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'sign-up',
+    component: SignUpComponent,
     canActivate: [authGuard],
   },
   {

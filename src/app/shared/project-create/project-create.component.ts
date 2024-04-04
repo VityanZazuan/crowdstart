@@ -1,9 +1,20 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild, inject } from '@angular/core';
-import { FormArray, FormBuilder,  FormGroup,  ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
+import { FormArray, FormBuilder,  FormControl,  FormGroup,  ReactiveFormsModule, Validators } from '@angular/forms';
 import {  debounceTime, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
 import { ProjectService } from '../../core/project.service';
+export interface IFormCreate {
+  projectName: string,
+  projectDescription: string,
+  projectImage: any,
+  goal: number,
+  days: Date,
+  author: string,
+  previewImage: File,
+  withRewards: boolean,
+  rewards: any[],
+}
 @Component({
   selector: 'app-project-create',
   standalone: true,
@@ -24,7 +35,7 @@ export class ProjectCreateComponent {
     goal: [''],
     days: [''],
     author: [''],
-    previewImage: [''],
+    // previewImage: new FormControl<File | null>(null),
     withRewards: [false],
     rewards: new FormArray([this.createReward()]),
   });
@@ -49,6 +60,7 @@ export class ProjectCreateComponent {
       rewardName: [],
     });
   }
+  createdProject!:any
   onCreateFormSubmit(): void {
     this.project
       .createProject({
@@ -60,12 +72,12 @@ export class ProjectCreateComponent {
         // tags:string
         link: 'test',
         image: 'test',
-
         goal: 1000,
       })
       .pipe(
-        switchMap((res: any) =>
-          this.project.createReward([
+        switchMap((res: any) => {
+          this.createdProject = res.data[0]
+          return this.project.createReward([
             {
               title: 'Награда 1',
               description: 'test',
@@ -91,8 +103,57 @@ export class ProjectCreateComponent {
               project_id: res.data[0].id,
             },
           ])
-        )
+        }
+        ),
+        switchMap(() => { 
+          console.log(this.createdProject);
+          
+          return this.project.uploadPreview(this.preview(), this.createdProject.title, this.createdProject.id,this.contentType)
+        })
+        // switchMap()
       )
       .subscribe();
   }
+  preview = signal('')
+  contentType!:string
+  onFileSelected(e: Event):void {
+    const files = (e.target as HTMLInputElement).files
+    console.log('uploaded files:', files);
+    if (files === null) return;
+    this.contentType = files[0].type
+    this.projectForm?.get('previewImage')?.updateValueAndValidity()
+    // File Preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.preview.set(reader.result as string)
+      console.log(this.preview());
+      
+    }
+    reader.readAsDataURL(files[0])
+    // this.cdr.detectChanges()
+  }
 }
+
+//
+//  project -> reward -> create folder -> create file
+//
+
+
+
+// const avatarFile = event.target.files[0]
+// const { data, error } = await supabase
+//   .storage
+//   .from('avatars')
+//   .upload('${<projectName>-<projectID>}/${<projectName>-preview}.png', avatarFile, {
+//     cacheControl: '3600',
+//     upsert: false
+//   })
+
+
+// import { decode } from 'base64-arraybuffer'
+// const { data, error } = await supabase
+//   .storage
+//   .from('avatars')
+//   .upload('${<projectName>-<projectID>}/${<projectName>-preview}.png', decode('base64FileData'), {
+//     contentType: 'image/png'
+//   })
