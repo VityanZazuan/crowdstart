@@ -1,7 +1,7 @@
 [build]
   publish = "dist/browser"
   command = "npm run build:prod"
-  base = "frontend"
+  base = "crowdstart"
 [[redirects]]
   from = "/*"
   to = "/index.html"
