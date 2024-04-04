@@ -1,0 +1,35 @@
+<div class="items-start bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
+    <a routerLink="/project/detail/{{projectInfo().link}}" [queryParams]="{id: projectInfo().id}" class="w-full h-full">
+        <img class="h-full rounded-lg sm:rounded-none sm:rounded-l-lg" [src]="publicUrl()" alt="Bonnie Avatar">
+    </a>
+    <div class="p-5 w-full">
+        <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <a routerLink="project/detail/{{projectInfo().link}}">{{projectInfo().title}}</a>
+        </h3>
+        <span class="text-gray-500 dark:text-gray-400">
+            <a [href]="projectInfo().author">{{projectInfo().author}}</a>
+        </span>
+        <p class="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">{{projectInfo().description}}</p>
+        <span class="text-gray-500 dark:text-gray-500 flex items-center gap-2" >
+            <svg class="w-4 h-4 text-gray-400 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+              </svg>              
+            {{projectInfo().daysRemaining}} дней осталось
+        </span>
+        <div class="mb-1 flex justify-between text-base font-medium dark:text-white">
+            <span>
+                {{percent()}}%
+            </span> 
+            <span class="text-gray-500 dark:text-gray-500">
+                из {{ projectInfo().goal }}
+            </span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-1.5 mb-4 dark:bg-gray-700">
+            <div [ngClass]="projectProgress()" class="max-w-full bg-blue-600 h-1.5 rounded-full dark:bg-blue-500" [ngStyle]="{
+                'width': percent() + '0%' 
+            }"></div>
+        </div>
+        
+    </div>
+</div> 
+<!-- [queryParams]="{id: projectInfo().id}" -->
